@@ -1,4 +1,5 @@
 #include <iostream>
+#include <random>
 
 using namespace std;
 
@@ -8,7 +9,22 @@ void swap(int *a, int *b) {
     *b = temp;
 }
 
+int get_rand_in_range(int low, int high) {
+    // better random generator
+    // refer: http://www.cplusplus.com/reference/random/mersenne_twister_engine/
+    // TODO: refactor to seed the generator only once
+    random_device rd; // obtain a random number from hardware
+    mt19937 mt_engine(rd()); // seed the generator
+
+    uniform_int_distribution<> distro(low, high); // define the range
+    return distro(mt_engine);
+//    return  (rand() % (high - low + 1)) + low; // not truly random
+}
+
 int partition(int arr[], int low, int high) {
+    int rand_idx = get_rand_in_range(low, high);
+    swap(&arr[rand_idx], &arr[low]);
+
     int pivot = arr[low];
     int i = low, j = low + 1;
 
